@@ -15,6 +15,7 @@ namespace AdventOfCodeEon.Data
         public string PartOne(string input)
         {
             ResetScreen();
+
             var commands = input.SplitByNewLine();
             foreach (var command in commands)
             {
@@ -36,71 +37,78 @@ namespace AdventOfCodeEon.Data
             switch (splitUpCommand[0])
             {
                 case "rect":
-                    TurnOnPixels(splitUpCommand[1]);
+                    TurnOnPixelsInUpperCorner(splitUpCommand[1]);
                     break;
                 case "rotate":
-                    MovePixels(splitUpCommand);
+                    ShiftPixels(splitUpCommand);
                     break;
                 default:
                     throw new InvalidOperationException();
             }
         }
 
-        private void TurnOnPixels(string rect)
+        private void TurnOnPixelsInUpperCorner(string rect)
         {
             var size = rect.Split('x');
-            for (int i = 0; i < int.Parse(size[1]); i++)
+            var height = int.Parse(size[1]);
+            var width = int.Parse(size[0]);
+
+            for (int i = 0; i < height; i++)
             {
-                for (int j = 0; j < int.Parse(size[0]); j++)
+                for (int j = 0; j < width ; j++)
                 {
                     Screen[i, j] = true;
                 }
             }
         }
 
-        private void MovePixels(string[] directions)
+        // Format of string 'shiftCommand': rotate row y=A by B / rotate column x=A by B
+        private void ShiftPixels(string[] shiftCommand)
         {
-            var where = directions[2].Split('=');
-            var howMany = int.Parse(directions[4]);
+            var where = shiftCommand[2].Split('=');
+            var arrayNumber = int.Parse(where[1]);
+            var numberOfSteps = int.Parse(shiftCommand[4]);
 
-            switch (directions[1])
+            switch (shiftCommand[1])
             {
                 case "row":
-                    ShiftRow(int.Parse(where[1]), howMany);
+                    ShiftRow(arrayNumber, numberOfSteps);
                     break;
                 case "column":
-                    ShiftColumn(int.Parse(where[1]), howMany);
+                    ShiftColumn(arrayNumber, numberOfSteps);
                     break;
                 default:
                     throw new InvalidOperationException();
             }
         }
 
-        private void ShiftRow(int row, int howMany)
+        private void ShiftRow(int rowNumber, int numberOfSteps)
         {
-            for (int shift = 0; shift < howMany; shift++)
+            for (int shift = 0; shift < numberOfSteps; shift++)
             {
-                var temp = Screen[row, ScreenWidth - 1];
+                var temp = Screen[rowNumber, ScreenWidth - 1];
 
                 for (int i = ScreenWidth - 1; i > 0; i--)
                 {
-                    Screen[row, i] = Screen[row, i - 1];
+                    Screen[rowNumber, i] = Screen[rowNumber, i - 1];
                 }
-                Screen[row, 0] = temp;
+
+                Screen[rowNumber, 0] = temp;
             }
         }
 
-        private void ShiftColumn(int column, int howMany)
+        private void ShiftColumn(int columnNumber, int numberOfSteps)
         {
-            for (int shift = 0; shift < howMany; shift++)
+            for (int shift = 0; shift < numberOfSteps; shift++)
             {
-                var temp = Screen[ScreenHeight - 1, column];
+                var temp = Screen[ScreenHeight - 1, columnNumber];
 
                 for (int i = ScreenHeight - 1; i > 0; i--)
                 {
-                    Screen[i, column] = Screen[i - 1, column];
+                    Screen[i, columnNumber] = Screen[i - 1, columnNumber];
                 }
-                Screen[0, column] = temp;
+
+                Screen[0, columnNumber] = temp;
             }
         }
 
