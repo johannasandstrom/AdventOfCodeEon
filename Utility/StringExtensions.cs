@@ -15,6 +15,7 @@ namespace AdventOfCodeEon.Utility
                 {
                     continue;
                 }
+
                 sb.Append(c);
             }
             return sb.ToString();
@@ -22,12 +23,12 @@ namespace AdventOfCodeEon.Utility
 
         public static IEnumerable<string> SplitByNewLine(this string input)
         {
-            return input.Split(new[] { "\n", Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            return input.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
         }
 
         public static string[] SplitByEmptyLine(this string input)
         {
-            return input.Split(new string[] { Environment.NewLine + Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            return input.Split(new[] { Environment.NewLine + Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
         }
     }
 }
