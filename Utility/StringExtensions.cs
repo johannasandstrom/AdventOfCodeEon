@@ -11,12 +11,10 @@ namespace AdventOfCodeEon.Utility
             StringBuilder sb = new();
             foreach (char c in input)
             {
-                if (c == '\n' || c == ' ' || c == '\t')
+                if (!char.IsWhiteSpace(c))
                 {
-                    continue;
+                    sb.Append(c);
                 }
-
-                sb.Append(c);
             }
             return sb.ToString();
         }
